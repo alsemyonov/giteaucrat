@@ -7,7 +7,7 @@ module Giteaucrat
     class JavaFormatter < Formatter
       COMMENT_PARTS = %w(/* * */)
 
-      COPYRIGHT_REGEXP = %r{/\*(?<ruler>\*+)\n(?<copyrights>(\s\*\s*[\w\d]+.*\n)+)(\s\*\s*\*?\n(?<comment>(\s\*\s?.*\*?\n)+))?(\s\g<ruler>\**/\n{1,2})}
+      COPYRIGHT_REGEXP = %r{/\*(?<ruler>\*+)\n(?<copyrights>(\s\*\s*[\w\d]+.*\n)+)(\s\*\s*\*?\n(?<comment>(\s\*\s?.*\*?\n)+))?(\s\g<ruler>\**/\n+)}
 
       def format_line(line)
         " * #{line} *"

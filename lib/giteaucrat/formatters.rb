@@ -7,6 +7,7 @@ module Giteaucrat
     EXTENSIONS = {
       '.rb' => :RubyFormatter,
       '.java' => :JavaFormatter,
+      '.py' => :PythonFormatter,
     }
 
     module_function
@@ -21,5 +22,6 @@ module Giteaucrat
 end
 
 require 'giteaucrat/formatters/formatter'
-require 'giteaucrat/formatters/ruby_formatter'
 require 'giteaucrat/formatters/java_formatter'
+require 'giteaucrat/formatters/ruby_formatter'
+require 'giteaucrat/formatters/python_formatter'
