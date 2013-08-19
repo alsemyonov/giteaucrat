@@ -1,4 +1,10 @@
 # coding: utf-8
+
+################################################
+# © Alexander Semyonov, 2013—2013              #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'giteaucrat'
 require 'grit'
 
