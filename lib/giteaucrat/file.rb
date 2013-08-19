@@ -35,6 +35,12 @@ module Giteaucrat
       end
     end
 
+    def owner
+      @owner ||= begin
+        Author.find_by_git_person(repo.git_repo.log(name).last.author)
+      end
+    end
+
     def read_contents
       ::File.read(name)
     end

@@ -91,9 +91,9 @@ module Giteaucrat
 
           if authors.size > 0
             authors_label = (authors.size > 1) ? 'Authors: ' : 'Author: '
-            author_names = self.authors.map { |a| a.identifier }.sort
+            author_names = (authors - [owner]).map { |a| a.identifier }.sort
             prepend = ' ' * authors_label.size
-            lines << "#{authors_label}#{author_names.shift}"
+            lines << "#{authors_label}#{owner.identifier}"
             author_names.each do |author|
               lines << "#{prepend}#{author}"
             end
