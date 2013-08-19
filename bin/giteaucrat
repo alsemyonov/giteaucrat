@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'giteaucrat'
+require 'giteaucrat/runner'
+
+Giteaucrat::Runner.start
