@@ -7,7 +7,7 @@ module Giteaucrat
 
       # @return [String]
       CODING_REGEXP = /\A(#\s*.*coding:\s*utf-8\s*\n+)?/
-      COPYRIGHT_REGEXP = /(##+#\n)(#\s.*\s#\n)+\1\n+/
+      COPYRIGHT_REGEXP = /(?<ruler>##+#\n)(?<copyright>(#\s*[\w\d]+.*\s#\n)+)(#\s+#?\n(?<comment>(#\s*.*#?\n)+))?\k<ruler>\n+/
 
       def format_copyright
         copyright = super
@@ -15,19 +15,30 @@ module Giteaucrat
         copyright
       end
 
+      def format_line(line)
+        "# #{line} #"
+      end
+
       def remove_copyright!
-        contents.sub!(COPYRIGHT_REGEXP, '')
+        super
         contents.sub!(CODING_REGEXP, '') if repo.include_encoding?
       end
 
       def add_copyright!
         if !repo.include_encoding? && (contents =~ CODING_REGEXP)
           lines = contents.split(/\n/).to_a
-          lines.insert(1, copyright)
+          lines.insert(1, format_copyright)
           @contents = lines.join("\n")
         else
           super
         end
+      end
+
+      def parse_comment(comment)
+        comment_lines = comment.split("\n").map do |line|
+          line.sub(/\A#\s?/, '').sub(/\s*#\s*\Z/, '')
+        end
+        @comment_lines = comment_lines
       end
     end
   end

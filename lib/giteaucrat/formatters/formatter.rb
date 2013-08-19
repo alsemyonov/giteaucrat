@@ -8,25 +8,66 @@ module Giteaucrat
     class Formatter < SimpleDelegator
       # @return [String]
       def format_copyright
-        first, middle, last = self.class.const_get(:COMMENT_PARTS)
-        copyright_lines
+        first, _, last = comment_parts
+        lines = copyright_lines
 
-        line_width = first.size + 1 + copyright_lines.first.size + 1 + last.size
-        ruler_width = (line_width - first.size - last.size) / middle.size
-        ruler = first + middle * ruler_width + last
+        max_line_size = lines.max { |a, b| a.size <=> b.size }.size
+        max_line_size += 1 if max_line_size.odd?
 
-        lines = []
-        lines << ruler
-        lines << copyright_lines.map { |line| "#{first} #{line} #{last}" }
-        lines << ruler
+        lines = lines.map do |line|
+          blank = ' ' * (max_line_size - line.size) if line.size < max_line_size
+          "#{line}#{blank}"
+        end
 
-        lines.join("\n")
+        line_width = first.size + 1 + max_line_size + 1 + last.size
+
+        formatted = []
+        formatted << header_ruler(line_width)
+        formatted << lines.map { |line| format_line(line) }
+        formatted << footer_ruler(line_width)
+        formatted.join("\n")
       end
 
-      # @return [String]
+      def comment_parts
+        self.class.const_get(:COMMENT_PARTS)
+      end
+
+      def header_ruler(line_width)
+        ruler(line_width)
+      end
+
+      def footer_ruler(line_width)
+        ruler(line_width)
+      end
+
+      def ruler(line_width)
+        first, middle, last = comment_parts
+        ruler_width = (line_width - first.size - last.size) / middle.size
+        "#{first}#{middle * ruler_width}#{last}"
+      end
+
+      def format_line(line)
+        "  #{line}  "
+      end
+
       def remove_copyright!
-        STDERR.puts "Override #{self.class}#remove_copyright"
-        contents
+        contents.sub!(self.class.const_get(:COPYRIGHT_REGEXP), '')
+        if $~ && $~[:comment]
+          parse_comment($~[:comment])
+        end
+      end
+
+      def parse_comment(comment)
+        @comment_lines = comment.split("\n")
+        @copyright_lines = nil
+      end
+
+      def comment_lines
+        @comment_lines
+      end
+
+      def comment?
+        !!@comment_lines
       end
 
       # @return [String]
@@ -45,7 +86,9 @@ module Giteaucrat
       def copyright_lines
         @copyright_lines ||= begin
           lines = []
+
           lines << repo.copyright_label
+
           if authors.size > 0
             authors_label = (authors.size > 1) ? 'Authors: ' : 'Author: '
             author_names = self.authors.map { |a| a.identifier }.sort
@@ -56,12 +99,9 @@ module Giteaucrat
             end
           end
 
-          max_line_size = lines.max { |a, b| a.size <=> b.size }.size
-          max_line_size += 1 if max_line_size.odd?
-
-          lines = lines.map do |line|
-            blank = ' ' * (max_line_size - line.size) if line.size < max_line_size
-            "#{line}#{blank}"
+          if comment?
+            lines << ''
+            lines += comment_lines
           end
 
           lines
