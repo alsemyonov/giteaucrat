@@ -1,5 +1,10 @@
 # coding: utf-8
 
+################################################
+# © Alexander Semyonov, 2013—2013              #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'giteaucrat'
 require 'grit'
 require 'core_ext/grit/blame'
@@ -38,8 +43,12 @@ module Giteaucrat
       ruler = "(#{first}(#{middle})*#{last}\n)"
       coding = "(#{first}\s*.*coding:\s*utf-8\s*\n+)?"
       header = /#{coding}#{ruler}(#{first}.*#{last}\n)*\2\n*/m
-      contents.sub!(header, '')
-      ::File.write(name, "#{copyright}\n\n#{contents}")
+      if repo.include_encoding?
+        contents.sub!(header, "#{copyright}\n\n")
+      else
+        contents.sub!(/(#{coding})/, "\1#{copyright}\n\n")
+      end
+      ::File.write(name, contents)
     end
 
     def copyright

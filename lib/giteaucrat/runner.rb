@@ -1,5 +1,10 @@
 # coding: utf-8
 
+################################################
+# © Alexander Semyonov, 2013—2013              #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'giteaucrat'
 require 'thor'
 require 'yaml'
@@ -38,6 +43,7 @@ module Giteaucrat
                  desc: 'License to put in copyright footer'
     class_option :include_encoding,
                  type: :boolean,
+                 default: true,
                  aliases: %w(-e),
                  desc: 'Put encoding in copyright footer',
                  group: :giteaucrat
