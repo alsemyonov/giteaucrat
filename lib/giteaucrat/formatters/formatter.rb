@@ -89,7 +89,7 @@ module Giteaucrat
 
           lines << repo.copyright_label
 
-          if authors.size > 0
+          if owner || authors.size > 0
             authors_label = (authors.size > 1) ? 'Authors: ' : 'Author: '
             author_names = (authors - [owner]).map { |a| a.identifier }.sort
             prepend = ' ' * authors_label.size
