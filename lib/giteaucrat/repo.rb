@@ -42,8 +42,8 @@ module Giteaucrat
     def files
       @files ||= begin
         Dir.chdir(path) do
-          %w(app lib script spec).inject([]) do |files, path|
-            files + Dir[::File.join(path, '**/*.rb')]
+          patterns.inject([]) do |files, pattern|
+            files + Dir[pattern]
           end.map do |file_name|
             File.new(name: file_name, repo: self)
           end
@@ -55,6 +55,17 @@ module Giteaucrat
       files.each do |file|
         file.write_copyright!
       end
+    end
+
+    # @return [<String>]
+    def patterns
+      @patterns || %w(app/**/*.rb lib/**/*.rb script/**/*.rb spec/**/*.rb test/**/*.rb)
+    end
+
+    attr_writer :patterns
+
+    def patterns=(patterns)
+      @patterns = patterns
     end
 
     def timeout

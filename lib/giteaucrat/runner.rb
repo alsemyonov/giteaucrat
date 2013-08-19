@@ -52,6 +52,11 @@ module Giteaucrat
                  aliases: %w(-c),
                  desc: 'Commit updated copyrights',
                  group: :giteaucrat
+    class_option :patterns,
+                 type: :array,
+                 aliases: %w(-f),
+                 desc: 'Files to copyright',
+                 group: :giteaucrat
 
     desc 'copyrights', 'Update copyright information in files'
 
