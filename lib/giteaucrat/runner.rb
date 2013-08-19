@@ -57,7 +57,7 @@ module Giteaucrat
 
     def copyrights
       repo.write_copyrights!
-      repo.commit("#{defaults[:commit_keyword]}: Update copyrights in source code") if options[:commit]
+      repo.commit!("#{defaults[:commit_keyword]}: Update copyrights in source code") if options[:commit]
       FileUtils.mkdir_p(::File.join(path, 'tmp'))
       ::File.write(::File.join(path, 'tmp', 'giteaucrat_authors.yml'), Author.to_yaml)
     end
@@ -79,7 +79,7 @@ module Giteaucrat
         end
 
         config = options.inject({}) do |config, (key, value)|
-          config[key] = value unless %w(config git path timeout).include?(key); config
+          config[key] = value unless %w(config git path timeout commit).include?(key); config
         end.to_yaml
 
         unless ::File.file?(options[:config])

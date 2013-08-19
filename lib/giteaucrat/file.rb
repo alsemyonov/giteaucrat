@@ -41,10 +41,12 @@ module Giteaucrat
       last = Regexp.escape(last)
       contents = ::File.read(name)
       ruler = "(#{first}(#{middle})*#{last}\n)"
-      coding = "(#{first}\s*.*coding:\s*utf-8\s*\n+)?"
+      coding = "\\A(#{first}\s*.*coding:\s*utf-8\s*\n+)?"
       header = /#{coding}#{ruler}(#{first}.*#{last}\n)*\2\n*/m
       if repo.include_encoding?
-        contents.sub!(header, "#{copyright}\n\n")
+        contents.sub!(header, '')
+        contents.sub!(/#{coding}/, '')
+        contents = "#{copyright}\n\n#{contents}"
       else
         contents.sub!(/(#{coding})/, "\1#{copyright}\n\n")
       end
