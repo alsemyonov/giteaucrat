@@ -22,3 +22,4 @@ end
 
 require 'giteaucrat/formatters/formatter'
 require 'giteaucrat/formatters/ruby_formatter'
+require 'giteaucrat/formatters/java_formatter'
