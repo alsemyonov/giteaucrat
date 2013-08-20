@@ -18,6 +18,7 @@ module Giteaucrat
       '.sass' => :SassFormatter,
       '.scss' => :SassFormatter,
       '.coffee' => :CoffeeFormatter,
+      '.erl' => :ErlangFormatter,
     }
 
     module_function
@@ -34,6 +35,7 @@ end
 require 'giteaucrat/formatters/formatter'
 
 require 'giteaucrat/formatters/coffee_formatter'
+require 'giteaucrat/formatters/erlang_formatter'
 require 'giteaucrat/formatters/java_formatter'
 require 'giteaucrat/formatters/python_formatter'
 require 'giteaucrat/formatters/ruby_formatter'
