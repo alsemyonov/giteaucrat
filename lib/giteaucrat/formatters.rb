@@ -8,6 +8,8 @@ module Giteaucrat
       '.rb' => :RubyFormatter,
       '.java' => :JavaFormatter,
       '.py' => :PythonFormatter,
+      '.sass' => :SassFormatter,
+      '.scss' => :SassFormatter,
     }
 
     module_function
@@ -25,3 +27,4 @@ require 'giteaucrat/formatters/formatter'
 require 'giteaucrat/formatters/java_formatter'
 require 'giteaucrat/formatters/ruby_formatter'
 require 'giteaucrat/formatters/python_formatter'
+require 'giteaucrat/formatters/sass_formatter'

@@ -16,7 +16,8 @@ module Giteaucrat
       end
 
       def format_line(line)
-        "# #{line} #"
+        first, _, last = comment_parts
+        "#{first} #{line} #{last}"
       end
 
       def remove_copyright!
@@ -25,7 +26,7 @@ module Giteaucrat
       end
 
       def add_copyright!
-        if !include_encoding? && (contents =~ CODING_REGEXP)
+        if !include_encoding? && !!(contents =~ CODING_REGEXP)
           lines = contents.split(/\n/).to_a
           lines.insert(1, format_copyright)
           @contents = lines.join("\n")
@@ -35,8 +36,9 @@ module Giteaucrat
       end
 
       def parse_comment(comment)
+        middle = Regexp.escape(comment_parts[1])
         comment_lines = comment.split("\n").map do |line|
-          line.sub(/\A#\s?/, '').sub(/\s*#\s*\Z/, '')
+          line.sub(/\A#{middle}\s?/, '').sub(/\s*#{middle}\s*\Z/, '')
         end
         @comment_lines = comment_lines
       end
