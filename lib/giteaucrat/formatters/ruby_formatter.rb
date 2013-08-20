@@ -13,12 +13,12 @@ module Giteaucrat
       COMMENT_PARTS = %w(# # #)
 
       # @return [String]
-      CODING_REGEXP = /\A(#\s*.*coding:\s*utf-8\s*\n+)?/
+      CODING_REGEXP = /\A((#\s*.*coding:\s*[^\s]+)\s*\n+)?/
       COPYRIGHT_REGEXP = /(?<ruler>##+#\n)(?<copyright>(#\s*[^\s#]+.*\s#\n)+)(#\s+#?\n(?<comment>(#\s*.*#?\n)+))?\k<ruler>\n+/
 
       def format_copyright
         copyright = super
-        copyright = "# coding: utf-8\n\n#{copyright}" if include_encoding?
+        copyright = [encoding, copyright].compact.join("\n\n")
         copyright
       end
 
@@ -29,17 +29,8 @@ module Giteaucrat
 
       def remove_copyright!
         super
-        contents.sub!(CODING_REGEXP, '') if include_encoding?
-      end
-
-      def add_copyright!
-        if !include_encoding? && !!(contents =~ CODING_REGEXP)
-          lines = contents.split(/\n/).to_a
-          lines.insert(1, format_copyright)
-          @contents = lines.join("\n")
-        else
-          super
-        end
+        contents.sub!(CODING_REGEXP, '')
+        @encoding = $2 if $2
       end
 
       def parse_comment(comment)
@@ -52,6 +43,10 @@ module Giteaucrat
 
       def include_encoding?
         repo.include_encoding?
+      end
+
+      def encoding
+        @encoding || (include_encoding? && '# coding: utf-8' || nil)
       end
     end
   end

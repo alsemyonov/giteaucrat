@@ -11,6 +11,8 @@ require 'delegate'
 module Giteaucrat
   module Formatters
     class Formatter < SimpleDelegator
+      HASHBANG_REGEXP = /\A(#!.*)\n/
+
       # @return [String]
       def format_copyright
         first, _, last = comment_parts
@@ -56,6 +58,10 @@ module Giteaucrat
       end
 
       def remove_copyright!
+        if contents =~ HASHBANG_REGEXP
+          @hashbang = $1
+          contents.sub!(HASHBANG_REGEXP, '')
+        end
         contents.sub!(self.class.const_get(:COPYRIGHT_REGEXP), '')
         if $~ && $~[:comment]
           parse_comment($~[:comment])
@@ -79,6 +85,7 @@ module Giteaucrat
       def write_copyright!
         remove_copyright!
         add_copyright!
+        @contents = [@hashbang, contents].compact.join("\n")
         write_contents(contents)
       end
 

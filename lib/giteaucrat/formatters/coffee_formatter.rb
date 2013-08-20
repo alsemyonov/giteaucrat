@@ -10,8 +10,8 @@ require 'giteaucrat/formatters/ruby_formatter'
 module Giteaucrat
   module Formatters
     class CoffeeFormatter < RubyFormatter
-      def include_encoding?
-        false
+      def encoding
+        nil
       end
 
       def add_copyright!
