@@ -1,3 +1,10 @@
+# coding: utf-8
+
+################################################
+# © Alexander Semyonov, 2013—2013, MIT License #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'giteaucrat'
 
 module Giteaucrat

@@ -1,5 +1,10 @@
 # coding: utf-8
 
+################################################
+# © Alexander Semyonov, 2013—2013, MIT License #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'giteaucrat/formatters/formatter'
 
 module Giteaucrat
@@ -7,7 +12,7 @@ module Giteaucrat
     class JavaFormatter < Formatter
       COMMENT_PARTS = %w(/* * */)
 
-      COPYRIGHT_REGEXP = %r{/\*(?<ruler>\*+)\n(?<copyrights>(\s\*\s*[\w\d]+.*\n)+)(\s\*\s*\*?\n(?<comment>(\s\*\s?.*\*?\n)+))?(\s\g<ruler>\**/\n+)}
+      COPYRIGHT_REGEXP = %r{/\*(?<ruler>\*+)\n(?<copyrights>(\s\*\s*[^\s\*]+.*\n)+)(\s\*\s*\*?\n(?<comment>(\s\*\s?.*\*?\n)+))?(\s\g<ruler>\**/\n+)}
 
       def format_line(line)
         " * #{line} *"

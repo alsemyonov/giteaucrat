@@ -1,3 +1,10 @@
+# coding: utf-8
+
+################################################
+# © Alexander Semyonov, 2013—2013, MIT License #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'giteaucrat/formatters/formatter'
 
 module Giteaucrat
@@ -7,7 +14,7 @@ module Giteaucrat
 
       # @return [String]
       CODING_REGEXP = /\A(#\s*.*coding:\s*utf-8\s*\n+)?/
-      COPYRIGHT_REGEXP = /(?<ruler>##+#\n)(?<copyright>(#\s*[\w\d]+.*\s#\n)+)(#\s+#?\n(?<comment>(#\s*.*#?\n)+))?\k<ruler>\n+/
+      COPYRIGHT_REGEXP = /(?<ruler>##+#\n)(?<copyright>(#\s*[^\s#]+.*\s#\n)+)(#\s+#?\n(?<comment>(#\s*.*#?\n)+))?\k<ruler>\n+/
 
       def format_copyright
         copyright = super
