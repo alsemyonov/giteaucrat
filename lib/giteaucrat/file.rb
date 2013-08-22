@@ -2,7 +2,8 @@
 
 ################################################
 # © Alexander Semyonov, 2013—2013, MIT License #
-# Author: Alexander Semyonov <al@semyonov.us>  #
+# Authors: Alexander Semyonov <al@semyonov.us> #
+#          Sergey Ukustov <sergey@ukstv.me>    #
 ################################################
 
 require 'giteaucrat'
