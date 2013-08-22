@@ -38,6 +38,9 @@ module Giteaucrat
     def owner
       @owner ||= begin
         Author.find_by_git_person(repo.git_repo.log(name).last.author)
+      rescue NoMethodError
+        Author.new(name: repo.git_repo.config['user.name'],
+                   email: repo.git_repo.config['user.email'])
       end
     end
 
