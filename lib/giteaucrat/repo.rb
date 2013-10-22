@@ -22,7 +22,7 @@ module Giteaucrat
     end
 
     def git_repo
-      @git_repo ||= Grit::Repo.new(path)
+      @git_repo ||= find_git_repo(path)
     end
 
     # @return [String]
@@ -128,5 +128,21 @@ module Giteaucrat
     def include_encoding?
       !!include_encoding
     end
+
+    private
+
+    # Finds a Git repository in the +directory+ or its parent directories.
+    # @param directory [String] Directory to expect a git repository.
+    # @return [Grit::Repo] Found git repository.
+    def find_git_repo(directory)
+      if ::File.exist?(::File.join(directory, '.git')) || directory =~ /\.git$/
+        Grit::Repo.new(directory)
+      elsif directory == '/'
+        raise Grit::InvalidGitRepositoryError
+      else
+        find_git_repo(::File.expand_path(::File.join(directory, '..')))
+      end
+    end
+
   end
 end
