@@ -29,3 +29,7 @@ You can see all available options using:
 5. Create new Pull Request
 
 © Alexander Semyonov, 2013. See MIT-LICENSE for details
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alsemyonov/giteaucrat/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
