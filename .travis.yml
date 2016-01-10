@@ -3,4 +3,4 @@ language: ruby
 cache: bundler
 rvm:
   - 2.3.0
-script: ./bin/giteaucrat
+script: bundle exec ./bin/giteaucrat copyrights
