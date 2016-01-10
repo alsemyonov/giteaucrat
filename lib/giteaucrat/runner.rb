@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
@@ -71,7 +71,6 @@ module Giteaucrat
 
     def defaults
       @defaults ||= begin
-        YAML::ENGINE.yamler = 'syck'
         Encoding.default_external = 'utf-8'
         Encoding.default_internal = 'utf-8'
 
@@ -93,7 +92,7 @@ module Giteaucrat
         end
 
         Dir.chdir(path)
-        Repo.defaults = {git: options[:git], git_timeout: options[:timeout]}
+        Repo.defaults = { git: options[:git], git_timeout: options[:timeout] }
         options
       end
     end

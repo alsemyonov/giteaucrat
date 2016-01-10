@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
@@ -18,7 +18,7 @@ module Giteaucrat
       '.sass' => :SassFormatter,
       '.scss' => :SassFormatter,
       '.coffee' => :CoffeeFormatter,
-      '.erl' => :ErlangFormatter,
+      '.erl' => :ErlangFormatter
     }
 
     module_function
@@ -26,7 +26,7 @@ module Giteaucrat
     def formatter_for(file)
       extension = ::File.extname(file.name)
       formatter = EXTENSIONS[extension]
-      raise(UnknownFormatError, extension) unless formatter
+      fail(UnknownFormatError, extension) unless formatter
       const_get(formatter).new(file)
     end
   end

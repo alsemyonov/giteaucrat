@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 

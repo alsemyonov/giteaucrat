@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
@@ -30,7 +30,7 @@ module Giteaucrat
       def remove_copyright!
         super
         contents.sub!(CODING_REGEXP, '')
-        @encoding = $2 if $2
+        @encoding = Regexp.last_match(2) if Regexp.last_match(2)
       end
 
       def parse_comment(comment)

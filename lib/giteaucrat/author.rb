@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
@@ -42,9 +42,7 @@ module Giteaucrat
     end
 
     def self.to_yaml
-      all.map do |author|
-        author.to_hash
-      end.sort { |a, b| a[:name] <=> b[:name] }.to_yaml
+      all.map(&:to_hash).sort { |a, b| a[:name] <=> b[:name] }.to_yaml
     end
 
     # @return [Boolean]
@@ -57,7 +55,7 @@ module Giteaucrat
 
     def check_multiple_emails!
       if emails.count > 1 && !instance_variable_defined?(:@email)
-        STDERR.puts "#{name} has multiple emails:\n#{emails.map {|e| "* #{e}"}.join("\n")}\nPlease set right one in your giteaucrat.yml\n"
+        STDERR.puts "#{name} has multiple emails:\n#{emails.map { |e| "* #{e}" }.join("\n")}\nPlease set right one in your giteaucrat.yml\n"
       end
     end
 
@@ -129,7 +127,7 @@ module Giteaucrat
 
     # @return [Hash]
     def to_hash
-      hash = {'name' => name.to_s, 'email' => email.to_s}
+      hash = { 'name' => name.to_s, 'email' => email.to_s }
       hash['names'] = names.to_a - [name] if names.size > 1
       hash['emails'] = emails.to_a - [email] if emails.size > 1
       hash['ignored'] = true if ignored?

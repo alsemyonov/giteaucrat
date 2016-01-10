@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
@@ -59,13 +59,11 @@ module Giteaucrat
 
       def remove_copyright!
         if contents =~ HASHBANG_REGEXP
-          @hashbang = $1
+          @hashbang = Regexp.last_match(1)
           contents.sub!(HASHBANG_REGEXP, '')
         end
         contents.sub!(self.class.const_get(:COPYRIGHT_REGEXP), '')
-        if $~ && $~[:comment]
-          parse_comment($~[:comment])
-        end
+        parse_comment($LAST_MATCH_INFO[:comment]) if $LAST_MATCH_INFO && $LAST_MATCH_INFO[:comment]
       end
 
       def parse_comment(comment)
@@ -73,9 +71,7 @@ module Giteaucrat
         @copyright_lines = nil
       end
 
-      def comment_lines
-        @comment_lines
-      end
+      attr_reader :comment_lines
 
       def comment?
         !!@comment_lines
@@ -103,7 +99,7 @@ module Giteaucrat
 
           if owner || authors.size > 0
             authors_label = (authors.size > 1) ? 'Authors: ' : 'Author: '
-            author_names = (authors - [owner]).map { |a| a.identifier }.sort
+            author_names = (authors - [owner]).map(&:identifier).sort
             prepend = ' ' * authors_label.size
             lines << "#{authors_label}#{owner.identifier}"
             author_names.each do |author|

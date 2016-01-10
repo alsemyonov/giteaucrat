@@ -1,7 +1,7 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
+# © Alexander Semyonov, 2013—2016, MIT License #
 # Authors: Alexander Semyonov <al@semyonov.us> #
 #          Sergey Ukustov <sergey@ukstv.me>    #
 ################################################
@@ -25,7 +25,7 @@ module Giteaucrat
       @authors ||= begin
         blame = repo.git_repo.blame(name)
         lines = blame.lines
-        commits = lines.map { |line| line.commit }.uniq.find_all do |commit|
+        commits = lines.map(&:commit).uniq.find_all do |commit|
           !repo.ignored_commit?(commit)
         end
         commits.inject(Set.new) do |authors, commit|

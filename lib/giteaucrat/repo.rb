@@ -1,8 +1,9 @@
 # coding: utf-8
 
 ################################################
-# © Alexander Semyonov, 2013—2013, MIT License #
-# Author: Alexander Semyonov <al@semyonov.us>  #
+# © Alexander Semyonov, 2013—2016, MIT License #
+# Authors: Alexander Semyonov <al@semyonov.us> #
+#          Sergey Ukustov <sergey@ukstv.me>    #
 ################################################
 
 require 'giteaucrat'
@@ -13,12 +14,8 @@ module Giteaucrat
     include Common
 
     def self.defaults=(options = {})
-      if options[:git]
-        Grit::Git.git_binary = options[:git]
-      end
-      if options[:git_timeout]
-        Grit::Git.git_timeout = options[:git_timeout]
-      end
+      Grit::Git.git_binary = options[:git] if options[:git]
+      Grit::Git.git_timeout = options[:git_timeout] if options[:git_timeout]
     end
 
     def git_repo
@@ -52,9 +49,7 @@ module Giteaucrat
     end
 
     def write_copyrights!
-      files.each do |file|
-        file.write_copyright!
-      end
+      files.each(&:write_copyright!)
     end
 
     # @return [<String>]
@@ -64,9 +59,7 @@ module Giteaucrat
 
     attr_writer :patterns
 
-    def patterns=(patterns)
-      @patterns = patterns
-    end
+    attr_writer :patterns
 
     def timeout
       Grit::Git.git_timeout
@@ -108,10 +101,10 @@ module Giteaucrat
 
     # @return [String]
     def copyright_label
-      @copyright_label ||= copyright_format.
-        gsub('%{years}', [copyright_year, Time.now.year].compact.join('—')).
-        gsub('%{owner}', copyright_owner).
-        gsub('%{license}', license || '')
+      @copyright_label ||= copyright_format
+                           .gsub('%{years}', [copyright_year, Time.now.year].compact.join('—'))
+                           .gsub('%{owner}', copyright_owner)
+                           .gsub('%{license}', license || '')
     end
 
     # @return [Regexp]
@@ -138,11 +131,10 @@ module Giteaucrat
       if ::File.exist?(::File.join(directory, '.git')) || directory =~ /\.git$/
         Grit::Repo.new(directory)
       elsif directory == '/'
-        raise Grit::InvalidGitRepositoryError
+        fail Grit::InvalidGitRepositoryError
       else
         find_git_repo(::File.expand_path(::File.join(directory, '..')))
       end
     end
-
   end
 end
